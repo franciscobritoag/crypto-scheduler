@@ -3,7 +3,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+url = "https://download.pytorch.org/whl/cpu"
+verify_ssl = true
+name = "pytorch"
+
 [packages]
+numpy = "*"
 pandas = "*"
 ccxt = "*"
 sendgrid = "*"
@@ -12,7 +18,8 @@ python-dotenv = "*"
 requests = "*"
 pytest = "*"
 requests-mock = "*"
-torch = {version = "1.13.1", index = "pytorch", extra = "cpu"}
+torch = "*"
+jinja2 = "*"
 
 [dev-packages]
 pytest = "*"

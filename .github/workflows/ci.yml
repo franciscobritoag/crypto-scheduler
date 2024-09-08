@@ -1,0 +1,40 @@
+name: CI - Build and Test
+
+# This triggers the workflow on every push or pull request to the main branch.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
+      - name: Run tests
+        if: success()
+        run: pipenv run pytest
+
+      - name: Upload Test Results (optional)
+        if: success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: ./test-reports/
