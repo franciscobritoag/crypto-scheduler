@@ -12,6 +12,7 @@ python-dotenv = "*"
 requests = "*"
 pytest = "*"
 requests-mock = "*"
+torch = {version = "*", index = "pytorch", extra = "cpu"}
 
 [dev-packages]
 pytest = "*"
