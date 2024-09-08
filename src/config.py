@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env file
-load_dotenv(dotenv_path='sendgrid.env')
+# load_dotenv(dotenv_path='sendgrid.env')
 
 # Now you can access environment variables
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
