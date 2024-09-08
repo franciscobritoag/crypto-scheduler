@@ -17,10 +17,16 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.12'
+        python-version: '3.11'
 
     - name: Install pipenv
       run: pip install pipenv
+
+    - name: Clear pipenv cache
+      run: pipenv --clear
+
+    - name: Re-lock dependencies with pre-releases allowed
+      run: pipenv lock --pre
 
     - name: Install dependencies
       run: pipenv install --dev

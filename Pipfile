@@ -12,10 +12,10 @@ python-dotenv = "*"
 requests = "*"
 pytest = "*"
 requests-mock = "*"
-torch = {version = "*", index = "pytorch", extra = "cpu"}
+torch = {version = "1.13.1", index = "pytorch", extra = "cpu"}
 
 [dev-packages]
 pytest = "*"
 
 [requires]
-python_version = "3.12"
+python_version = "3.11"
