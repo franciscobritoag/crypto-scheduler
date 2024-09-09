@@ -10,7 +10,7 @@ logger = setup_logging()
 
 def process_symbol(symbol):
     result = ""
-    df = get_crypto_data(symbol, limit=365)
+    df = get_crypto_data(symbol)
     if df is not None:
         forecast = forecast_price(df)
         if forecast is not None:
@@ -32,7 +32,7 @@ def process_symbol(symbol):
 
 def main():
     start_time = time.time()
-    symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT']
+    symbols = ['bitcoin', 'ethereum', 'solana']
     results = []
 
     with ThreadPoolExecutor() as executor:
