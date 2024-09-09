@@ -1,6 +1,5 @@
 name: CI - Build and Test
 
-# This triggers the workflow on every push or pull request to the main branch.
 on:
   push:
     branches:
@@ -25,6 +24,12 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
 
+      - name: Clear pipenv cache
+        run: pipenv --clear
+
+      - name: Re-lock dependencies with pre-releases allowed
+        run: pipenv lock --pre
+
       - name: Install dependencies
         run: pipenv install --dev
 
@@ -45,4 +50,17 @@ jobs:
         with:
           name: coverage-results
           path: ./coverage.xml
-        
+
+      - name: Display Test Results
+        uses: dorny/test-reporter@v1
+        with:
+          name: Unit Tests
+          path: ./test-reports/results.xml
+          reporter: java-junit
+
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          fail_ci_if_error: true
