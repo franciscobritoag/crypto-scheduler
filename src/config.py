@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env file
+
+# Uncomment the following line for local execution
 # load_dotenv(dotenv_path='sendgrid.env')
 
 # Now you can access environment variables
