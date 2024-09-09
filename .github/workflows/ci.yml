@@ -28,13 +28,21 @@ jobs:
       - name: Install dependencies
         run: pipenv install --dev
 
-      - name: Run tests
+      - name: Run tests with coverage
         if: success()
-        run: pipenv run pytest
-
-      - name: Upload Test Results (optional)
+        run: pipenv run pytest --cov=src --cov-report=xml --junitxml=./test-reports/results.xml
+      
+      - name: Upload Test Results
         if: success()
         uses: actions/upload-artifact@v2
         with:
           name: test-results
-          path: ./test-reports/
+          path: ./test-reports/results.xml
+
+      - name: Upload Coverage Results
+        if: success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-results
+          path: ./coverage.xml
+        
