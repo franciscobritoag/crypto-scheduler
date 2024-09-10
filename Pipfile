@@ -19,12 +19,15 @@ python-dotenv = "*"
 requests = "*"
 pytest = "*"
 requests-mock = "*"
-torch = "*"
+torch = {version = "*", index = "pytorch"}
+torchvision = {version = "*", index = "pytorch"}
 jinja2 = "*"
+absl-py = "<=2.0.0"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.11"
