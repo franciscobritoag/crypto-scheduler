@@ -6,8 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-
+  build-and-run:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,17 +18,19 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Cache pipenv dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: pipenv-${{ hashFiles('Pipfile.lock') }}
+        restore-keys: |
+          pipenv-
+
     - name: Install pipenv
       run: pip install pipenv
 
-    - name: Clear pipenv cache
-      run: pipenv --clear
-
-    - name: Re-lock dependencies with pre-releases allowed
-      run: pipenv lock --pre
-
     - name: Install dependencies
-      run: pipenv install --dev
+      run: pipenv install --deploy --dev
 
     - name: Run the cryptocurrency analysis script
       env:
@@ -37,3 +38,14 @@ jobs:
         SENDGRID_FROM_EMAIL: ${{ secrets.SENDGRID_FROM_EMAIL }}
         SENDGRID_TO_EMAIL: ${{ secrets.SENDGRID_TO_EMAIL }}
       run: pipenv run python main.py
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: build-and-run
+    if: failure()
+
+    steps:
+    - name: Send error notification
+      run: |
+        echo "Error in the cryptocurrency analysis workflow. Check logs for details."
+        # Optionally, send an email, Slack, or other notification
