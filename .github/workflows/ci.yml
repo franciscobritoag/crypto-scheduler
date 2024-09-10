@@ -24,7 +24,15 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
 
-      - name: Clear pipenv cache
+      - name: Cache pipenv dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: pipenv-${{ hashFiles('Pipfile.lock') }}
+          restore-keys: |
+            pipenv-
+
+      - name: Clear pipenv cache (if necessary)
         run: pipenv --clear
 
       - name: Re-lock dependencies with pre-releases allowed
@@ -33,34 +41,69 @@ jobs:
       - name: Install dependencies
         run: pipenv install --dev
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Cache pipenv dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: pipenv-${{ hashFiles('Pipfile.lock') }}
+          restore-keys: |
+            pipenv-
+
+      - name: Install dependencies (skip locking this time)
+        run: pipenv install --dev
+
       - name: Run tests with coverage
-        if: success()
         run: pipenv run pytest --cov=src --cov-report=xml --junitxml=./test-reports/results.xml
       
       - name: Upload Test Results
-        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: test-results
           path: ./test-reports/results.xml
 
       - name: Upload Coverage Results
-        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: coverage-results
           path: ./coverage.xml
 
+  report:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Download Test Results
+        uses: actions/download-artifact@v2
+        with:
+          name: test-results
+
+      - name: Download Coverage Results
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-results
+
       - name: Display Test Results
         uses: dorny/test-reporter@v1
         with:
           name: Unit Tests
-          path: ./test-reports/results.xml
+          path: './test-reports/results.xml'
           reporter: java-junit
 
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
         with:
-          files: ./coverage.xml
-          flags: unittests
-          fail_ci_if_error: true
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
