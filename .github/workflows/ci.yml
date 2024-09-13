@@ -41,13 +41,13 @@ jobs:
         run: pipenv run pytest -n auto --junitxml=./test-reports/results.xml --cov=src --cov-report=term-missing:skip-covered | tee pytest-coverage.txt
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: ./test-reports/results.xml
 
       - name: Upload Coverage Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage-results
           path: ./pytest-coverage.txt
@@ -61,13 +61,13 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Download Test Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: test-results
           path: ./test-reports
 
       - name: Download Coverage Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: coverage-results
 

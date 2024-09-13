@@ -48,4 +48,3 @@ jobs:
     - name: Send error notification
       run: |
         echo "Error in the cryptocurrency analysis workflow. Check logs for details."
-        # Optionally, send an email, Slack, or other notification

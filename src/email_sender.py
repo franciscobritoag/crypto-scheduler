@@ -1,3 +1,18 @@
+"""
+email_sender.py
+
+This module handles sending forecast results via email using the SendGrid API.
+
+Functions:
+- send_email(subject, content): Sends an email with the provided subject and content.
+- generate_html_content(subject, content): Generates HTML content for the email.
+- validate_email_parameters(subject, content): Validates the subject and content before sending.
+  
+Dependencies:
+- sendgrid: SendGrid API for sending emails.
+- jinja2: For templating HTML content for the email.
+"""
+
 import sendgrid
 from sendgrid.helpers.mail import Mail
 from src.config import SENDGRID_API_KEY, SENDGRID_FROM_EMAIL, SENDGRID_TO_EMAIL

@@ -1,3 +1,17 @@
+"""
+data_fetcher.py
+
+This module handles fetching cryptocurrency data using the CoinGecko API.
+
+Functions:
+- get_crypto_data(symbol, vs_currency='usd', days='365'): Fetches historical
+  cryptocurrency data and returns it as a DataFrame.
+
+Dependencies:
+- pycoingecko: For fetching data from the CoinGecko API.
+- pandas: For data manipulation and analysis.
+"""
+
 from pycoingecko import CoinGeckoAPI
 import pandas as pd
 import logging

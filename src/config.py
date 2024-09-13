@@ -1,9 +1,22 @@
+"""
+config.py
+
+This module loads environment variables for the application, particularly for
+sending emails using SendGrid.
+
+Environment variables:
+- SENDGRID_API_KEY: The API key for SendGrid.
+- SENDGRID_FROM_EMAIL: The sender's email address for sending forecasts.
+- SENDGRID_TO_EMAIL: The recipient's email address for receiving forecasts.
+
+Usage:
+- Make sure to set up a .env file with the necessary keys or configure them in your system environment.
+"""
+
 from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env file
-
-# Uncomment the following line for local execution
 load_dotenv(dotenv_path='sendgrid.env')
 
 # Now you can access environment variables

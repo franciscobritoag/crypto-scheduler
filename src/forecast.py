@@ -1,3 +1,16 @@
+"""
+forecast.py
+
+This module contains the logic for forecasting cryptocurrency prices using the NeuralProphet model.
+
+Functions:
+- forecast_price(df): Generates a forecast for the cryptocurrency prices from the provided DataFrame.
+
+Dependencies:
+- neuralprophet: For time series forecasting.
+- pandas: For data manipulation and analysis.
+"""
+
 from neuralprophet import NeuralProphet
 import pandas as pd
 import logging
