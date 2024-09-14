@@ -1,5 +1,6 @@
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from jinja2 import Template
 from src.config import SENDGRID_FROM_EMAIL, SENDGRID_TO_EMAIL
 from src.data_fetcher import get_crypto_data
 from src.forecast import forecast_price
@@ -8,8 +9,13 @@ from src.utils import setup_logging
 
 logger = setup_logging()
 
+forecast_template = Template('''
+<h3>Forecast for {{ symbol }}:</h3>
+<p>Next 10 days:</p>
+{{ forecast_html|safe }}
+''')
+
 def process_symbol(symbol):
-    result = ""
     df = get_crypto_data(symbol)
     if df is not None:
         forecast = forecast_price(df)
@@ -18,17 +24,13 @@ def process_symbol(symbol):
             forecast['Value'] = forecast['Value'].apply(lambda x: f"$ {x:.2f}")
             forecast_html = forecast[['Date', 'Value']].to_html(index=False, classes='forecast-table')
 
-            result += f"""
-            <h3>Forecast for {symbol}:</h3>
-            <p>Next 10 days:</p>
-            {forecast_html}
-            """
+            return forecast_template.render(symbol=symbol, forecast_html=forecast_html)
         else:
-            result += f"<h3>Forecasting failed for {symbol}</h3>"
+            logger.error(f"Forecasting failed for {symbol}")
+            return f"<h3>Forecasting failed for {symbol}</h3>"
     else:
-        result += f"<h3>Fetching data failed for {symbol}</h3>"
-    return result
-
+        logger.error(f"Fetching data failed for {symbol}")
+        return f"<h3>Fetching data failed for {symbol}</h3>"
 
 def main():
     start_time = time.time()
