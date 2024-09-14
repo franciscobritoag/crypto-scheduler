@@ -14,15 +14,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
       - name: Cache pip dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: pip-${{ hashFiles('Pipfile.lock') }}
@@ -41,13 +41,13 @@ jobs:
         run: pipenv run pytest -n auto --junitxml=./test-reports/results.xml --cov=src --cov-report=term-missing:skip-covered | tee pytest-coverage.txt
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: ./test-reports/results.xml
 
       - name: Upload Coverage Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-results
           path: ./pytest-coverage.txt
@@ -58,16 +58,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         
       - name: Download Test Results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: test-results
           path: ./test-reports
 
       - name: Download Coverage Results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: coverage-results
 
